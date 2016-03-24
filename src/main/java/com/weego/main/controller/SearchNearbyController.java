@@ -1,4 +1,4 @@
-package com.weego.main.controller.api;
+package com.weego.main.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

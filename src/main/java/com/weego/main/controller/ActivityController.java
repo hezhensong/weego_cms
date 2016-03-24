@@ -1,4 +1,4 @@
-package com.weego.main.controller.api;
+package com.weego.main.controller;
 
 import com.weego.main.constant.ErrorCode;
 import com.weego.main.dto.ActivityBaseDto;
