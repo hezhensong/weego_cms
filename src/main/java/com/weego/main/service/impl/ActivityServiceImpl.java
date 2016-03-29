@@ -8,6 +8,7 @@ import com.weego.main.model.Activity;
 import com.weego.main.model.ActivityParagraphs;
 import com.weego.main.service.ActivityService;
 import com.weego.main.util.DateUtil;
+import jdk.nashorn.internal.runtime.ECMAException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +108,21 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public ActivityDetailDto setActivityDetail(Activity setCityActivity,String cityId){
+        logger.info("城市活动列表添加, cityId = {}", cityId);
+
+        ActivityDetailDto activityDetailDto = new ActivityDetailDto();
+
+        try {
+            Activity cityActivity = cityActivityDao.setSpecifiedCity(setCityActivity,cityId);
+        } catch (Exception e){
+            logger.fatal("城市活动列表添加数据失败 {}", e.getStackTrace());
+            return null;
+        }
+        return activityDetailDto;
+    }
+
+    @Override
     public List<ActivityBaseDto> getActivityList(String cityId) {
         logger.info("查询城市活动列表, cityId = {}", cityId);
         logger.info("---------查询城市活动列表开始----------");
@@ -141,9 +157,8 @@ public class ActivityServiceImpl implements ActivityService {
                     Date openTime = cityActivity.getOpenTime();
                     System.out.println("openTime:" + openTime);
                     Date closeTime = cityActivity.getCloseTime();
-
                     logger.info("---------查询城市活动列表开始----------");
-                    if (openTime != null && closeTime != null) {
+                    if (openTime != null &&  closeTime != null) {
 
                         // 计算活动开始时间与当前日期相差的天数
                         int openNow;
@@ -189,6 +204,44 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public ActivityBaseDto delActivityBase(String cityId){
+        logger.info("删除城市活动列表, cityId = {}", cityId);
+        logger.info("---------删除城市活动列表开始----------");
+
+        ActivityBaseDto activityBaseDto = new ActivityBaseDto();
+        try{
+            Activity activityList = cityActivityDao.delSpecifiedCity(cityId);
+        } catch (Exception e){
+            logger.fatal("城市活动列表接口获取数据失败 {}", e.getStackTrace());
+        }
+        return activityBaseDto;
+    }
+
+    @Override
+    public ActivityBaseDto getActivityBase(String cityBaseId){
+        logger.info("查询城市基本, cityBaseId = {}", cityBaseId);
+
+        ActivityBaseDto activityBaseDto = new ActivityBaseDto();
+
+        try {
+            Activity cityActivity = cityActivityDao.getSpecifiedCity(cityBaseId);
+
+            if (cityActivity != null) {
+                activityBaseDto.setId(cityActivity.getId().toString());
+                activityBaseDto.setImage(cityActivity.getImage());
+                activityBaseDto.setType(cityActivity.getType());
+                activityBaseDto.setTitle(cityActivity.getTitle());
+                activityBaseDto.setAddress(cityActivity.getAddress());
+                activityBaseDto.setActTime(cityActivity.getActTime());
+            }
+        } catch (Exception e){
+            logger.fatal("城市活动基础页接口获取数据失败 {}", e.getStackTrace());
+            return null;
+        }
+        return activityBaseDto;
+    }
+
+    @Override
     public ModelAndView getSpecifiedActivity(String activityId) {
 
         Activity activity = cityActivityDao.getSpecifiedCity(activityId);
@@ -209,5 +262,11 @@ public class ActivityServiceImpl implements ActivityService {
             return mv;
         }
 
+    }
+
+    @Override
+    public ModelAndView getActivity() {
+            ModelAndView mv = new ModelAndView("name");
+            return mv;
     }
 }

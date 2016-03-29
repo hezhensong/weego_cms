@@ -30,4 +30,27 @@ public class WeatherDao {
             return null;
         }
     }
+
+    public Weather setWeatherByCityId(Weather wea,String cityId) {
+        DBCollection collection = database.getCollection("weather");
+
+        JacksonDBCollection<Weather, String> coll;
+        coll = JacksonDBCollection.wrap(collection, Weather.class, String.class);
+
+        BasicDBObject query = new BasicDBObject();
+        query.put("city_id", cityId);
+        //collection.setObjectClass(WeatherDao.class);
+
+        // BasicDBObject condition = new BasicDBObject();
+        //condition.put("update_time",update_time );
+        collection.insert(query);
+
+        List<Weather> cityList = coll.find().toArray();
+
+        if (cityList != null && cityList.size() > 0) {
+            return cityList.get(0);
+        } else {
+            return null;
+        }
+    }
 }

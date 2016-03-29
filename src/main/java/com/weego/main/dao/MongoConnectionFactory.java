@@ -32,8 +32,11 @@ public class MongoConnectionFactory {
 
     private static void initializeMongoClient() throws UnknownHostException {
 
-        String host = "192.168.6.254";
+        String host = "192.168.8.250";
         Integer port = 37017;
+
+        //String host = "127.0.0.1";
+        //Integer port = 27017;
 
         mongoClient = new MongoClient(host, port);
     }

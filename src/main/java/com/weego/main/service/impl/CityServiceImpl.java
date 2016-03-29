@@ -223,6 +223,48 @@ public class CityServiceImpl implements CityService {
         return cityHomeDto;
     }
 
+    public CityHomeWeatherDto getCitHomeWeather(String cityId){
+        CityHomeDto cityHomeDto = new CityHomeDto();
+        CityHomeWeatherDto cityHomeWeatherDto = new CityHomeWeatherDto();
+        try{
+            // 获取城市天气信息
+            cityHomeDto.setWeather(cityHomeWeatherDto);
+
+            Weather weather = weatherDao.getWeatherByCityId(cityId);
+
+            // 当天天气
+            WeatherCondition weatherCondition = weather.getCondition();
+            WeatherConditionDto weatherConditionDto = new WeatherConditionDto();
+            cityHomeWeatherDto.setCondition(weatherConditionDto);
+
+            weatherConditionDto.setUpdateTime(weatherCondition.getUpdate_time().toString());
+            weatherConditionDto.setHigh(weatherCondition.getHigh() + "");
+            weatherConditionDto.setLow(weatherCondition.getLow() + "");
+            weatherConditionDto.setSunrise(weatherCondition.getSunrise());
+            weatherConditionDto.setSunset(weatherCondition.getSunset());
+            weatherConditionDto.setTemperature(weatherCondition.getTemperature() + "");
+
+            String description = weatherCondition.getDescription().toLowerCase();
+
+        }catch(Exception e){
+            logger.fatal("城市天气获取失败 {}", e.getStackTrace());
+            return null;
+        }
+        return cityHomeWeatherDto;
+    }
+
+    public WeatherDao setWeather(Weather wea, String cityId){
+        WeatherDao weatherDao = new WeatherDao();
+        try{
+            Weather weather = weatherDao.setWeatherByCityId(wea,cityId);
+        } catch(Exception e){
+            logger.fatal("插入信息失败{}", e.getStackTrace());
+            return null;
+        }
+        return weatherDao;
+    }
+
+
     private List<Map<String, String>> convertCityLabelListToMap(List<CityLabel> cityLabelList) {
         List<Map<String, String>> attractionLabelList = new ArrayList<>();
 
