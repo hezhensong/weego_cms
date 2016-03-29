@@ -1,24 +1,19 @@
 package com.weego.main.controller;
 
+import com.weego.main.dto.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.weego.main.dto.POICommentsDto;
-import com.weego.main.dto.POIDetailDto;
-import com.weego.main.dto.POIListDto;
-import com.weego.main.dto.POISpecialDetailDto;
-import com.weego.main.dto.POISpecialDto;
-import com.weego.main.dto.POITranslationDto;
 import com.weego.main.service.BasePOIService;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/api/v3/city")
 public class BasePOIController {
 
+	private Logger logger = LogManager.getLogger(BasePOIController.class);
 	@Autowired
 	BasePOIService basePOIService;
 
@@ -77,4 +72,18 @@ public class BasePOIController {
 
 		return basePOIService.getPOITranslation(content, from, to);
 	}
+
+	//Ray add POI基本信息
+	@RequestMapping(value = "/discovery/specialdetail/{type}",method = RequestMethod.GET)
+	public ModelAndView getPOIBaseDetail(@RequestParam("Id") String Id, @PathVariable("type") Integer type){
+		logger.info("开始POI基本信息列表查询");
+		logger.info("Id={}",Id,"type={}",type);
+
+		POIBaseDetailDto POIBaseDetail = basePOIService.getPOIBaseDetail(Id,type);
+
+		ModelAndView view = basePOIService.getPOIspecialDetailMv(type);
+		view.addObject("POIdetail", POIBaseDetail);
+		return view;
+	}
+
 }

@@ -1,17 +1,11 @@
 package com.weego.main.service.impl;
 
+import com.weego.main.dto.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.weego.main.dto.POICommentsDto;
-import com.weego.main.dto.POIDetailDto;
-import com.weego.main.dto.POIListDto;
-import com.weego.main.dto.POISpecialDetailDto;
-import com.weego.main.dto.POISpecialDto;
-import com.weego.main.dto.POITranslationBaseDto;
-import com.weego.main.dto.POITranslationDto;
 import com.weego.main.service.AttractionService;
 import com.weego.main.service.BasePOIService;
 import com.weego.main.service.BrandService;
@@ -20,6 +14,7 @@ import com.weego.main.service.RestaurantService;
 import com.weego.main.service.ShoppingService;
 import com.weego.main.service.SpotService;
 import com.weego.main.util.BaiDuTranslateUtil;
+import org.springframework.web.servlet.ModelAndView;
 
 @Service("basePOIService")
 public class BasePOIServiceImpl implements BasePOIService {
@@ -126,7 +121,32 @@ public class BasePOIServiceImpl implements BasePOIService {
 		return poiTranslationDto;
 	}
 	
-	
-	
-	
+	//Ray add POI基本信息
+	@Override
+	public POIBaseDetailDto getPOIBaseDetail(String Id, Integer type){
+		if (type == 0) {
+		} else if (type == 1) {
+		} else if (type == 2) {
+		} else {
+			logger.info("type 参数值有误");
+			return null;
+		}
+	}
+
+	@Override
+	public ModelAndView getPOIspecialDetailMv(Integer type){
+		if (type == 0) {
+			ModelAndView view = new ModelAndView("/POI/spot_detail");
+			return view;
+		} else if (type == 1) {
+			ModelAndView view = new ModelAndView("/POI/restaurant_detail");
+			return view;
+		} else if (type == 2) {
+			ModelAndView view = new ModelAndView("/POI/shopping_detail");
+			return view;
+		} else {
+			logger.info("type 参数值有误");
+			return null;
+		}
+	}
 }
